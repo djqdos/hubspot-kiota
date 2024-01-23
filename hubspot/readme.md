@@ -179,10 +179,6 @@ One thing I've not figured out as of yet, is error handing. If, for example, you
 You can do Middleware things to catch these, but I've not tried those as of this writing.
 
 
-The HubSpot api is split up into it's constituent parts, with an OpenAPI spec for each part (one for Tickets, one for Companies, one for Notes etc). I haven't found a way of being able to combine these, without manually modifying the OpenAPI spec. This currently would generate a client for each section - which may not be what we want.
-
-
-
 
 ### Sample Unit Test document to show example usage
 
