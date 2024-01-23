@@ -1,20 +1,21 @@
-using ApiSdk;
-using ApiSdk.Models;
 using FluentAssertions;
+using True.Services.HubSpot.Tickets;
+using True.Services.HubSpot.Tickets.Models;
 using Microsoft.Kiota.Abstractions.Authentication;
 using Microsoft.Kiota.Http.HttpClientLibrary;
 
+
 namespace TestProject1
 {
-    public class UnitTest1
+    public class TicketsUnitTest
     {
-        private readonly ApiClient _client;
+        private readonly HubSpotTicketsClient _client; 
 
-        public UnitTest1()
+        public TicketsUnitTest()
         {
             ApiKeyAuthenticationProvider authProvider = new ApiKeyAuthenticationProvider("Bearer pat-eu1-d4a84933-387a-48ac-afb8-d3ccc8a5245d", "Authorization", ApiKeyAuthenticationProvider.KeyLocation.Header);
             HttpClientRequestAdapter requestAdapter = new HttpClientRequestAdapter(authProvider);
-            _client = new ApiClient(requestAdapter);
+            _client = new HubSpotTicketsClient(requestAdapter);
         }
 
 
@@ -50,9 +51,10 @@ namespace TestProject1
         {
             try
             {
-                var ticket = await _client.Crm.V3.Objects.Tickets["bob"].GetAsync();
+                var ticket = await _client.Crm.V3.Objects.Tickets[ticketId].GetAsync();
 
                 ticket.Should().NotBeNull();
+                
                 ticket.Properties.AdditionalData["subject"].Should().Be("Test Ticket");
 
             }

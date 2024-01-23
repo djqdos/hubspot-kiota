@@ -11,20 +11,32 @@
 
   <ItemGroup>
     <PackageReference Include="FluentAssertions" Version="6.12.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.2" />
-    <PackageReference Include="xunit" Version="2.4.2" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
+    <PackageReference Include="Microsoft.Kiota.Abstractions" Version="1.7.5" />
+    <PackageReference Include="Microsoft.Kiota.Http.HttpClientLibrary" Version="1.3.4" />
+    <PackageReference Include="Microsoft.Kiota.Serialization.Form" Version="1.1.1" />
+    <PackageReference Include="Microsoft.Kiota.Serialization.Json" Version="1.1.2" />
+    <PackageReference Include="Microsoft.Kiota.Serialization.Multipart" Version="1.1.1" />
+    <PackageReference Include="Microsoft.Kiota.Serialization.Text" Version="1.1.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+    <PackageReference Include="xunit" Version="2.6.6" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.6">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="coverlet.collector" Version="3.1.2">
+    <PackageReference Include="coverlet.collector" Version="6.0.0">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Hubspot\Hubspot.csproj" />
+    <ProjectReference Include="..\HubSpot.Associations\HubSpot.Associations.csproj" />
+    <ProjectReference Include="..\HubSpot.Companies\HubSpot.Companies.csproj" />
+    <ProjectReference Include="..\HubSpot.Contacts\HubSpot.Contacts.csproj" />
+    <ProjectReference Include="..\HubSpot.Pipelines\HubSpot.Pipelines.csproj" />
+    <ProjectReference Include="..\HubSpot.Properties\HubSpot.Properties.csproj" />
+    <ProjectReference Include="..\HubSpot.Quotes\HubSpot.Quotes.csproj" />
+    <ProjectReference Include="..\HubSpot.Tickets\HubSpot.Tickets.csproj" />
   </ItemGroup>
 
 </Project>
