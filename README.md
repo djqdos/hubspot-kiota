@@ -182,6 +182,110 @@ You can do Middleware things to catch these, but I've not tried those as of this
 The HubSpot api is split up into it's constituent parts, with an OpenAPI spec for each part (one for Tickets, one for Companies, one for Notes etc). I haven't found a way of being able to combine these, without manually modifying the OpenAPI spec. This currently would generate a client for each section - which may not be what we want.
 
 
+### Error Responses
+Kiota will generate error responses, if they have been defined in the OpenAPI specification.
+if an error is returned from HubSpot, such as a 400, or 500 error, then an exception will be thrown - so any calls will need to be try/caught.
+
+What _doesn't_ appear to happen currently, is that if a 'default' error catch-all has been defined, then it won't generate a specific error model, and will have the standard kiota error.
+This standard error does _not_ give any indication on what has actually gone wrong - it will just return that it's the standard error response, because no error factories have been registered. I couldn't find any info on what/how to register your own.
+
+What I _have_ found, is that the OpenAPI spec for HubSpot, contains the 'StandardError' response, which looks like this:
+
+```json
+{
+  "subCategory": {},
+  "context": {
+    "additionalProp1": [
+      "string"
+    ],
+    "additionalProp2": [
+      "string"
+    ],
+    "additionalProp3": [
+      "string"
+    ]
+  },
+  "links": {
+    "additionalProp1": "string",
+    "additionalProp2": "string",
+    "additionalProp3": "string"
+  },
+  "id": "string",
+  "category": "string",
+  "message": "string",
+  "errors": [
+    {
+      "subCategory": "string",
+      "code": "string",
+      "in": "string",
+      "context": {
+        "missingScopes": [
+          "scope1",
+          "scope2"
+        ]
+      },
+      "message": "string"
+    }
+  ],
+  "status": "string"
+}
+```
+is present in the OpenAPI spec. If you modify the specification, and add in the specifics that you want to catch for, for example:
+
+```json
+"post": {
+        "tags": [
+          "Basic"
+        ],
+        "summary": "Create",
+        "description": "Create a ticket with the given properties and return a copy of the object, including the ID. Documentation and examples for creating standard tickets is provided.",
+        "operationId": "post-/crm/v3/objects/tickets_create",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SimplePublicObjectInputForCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SimplePublicObject"
+                }
+              }
+            }
+          },
+
+          // this is the new bit
+          "400": {
+            "description": "400 error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StandardError"
+                }
+              }
+            }
+          },
+          // end of the new bit
+
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+```
+Then the `StandardError` model will be created, and you will be able to try/catch for that StandardError.
+Of course, this does mean that an edit of the OpenAPI spec is required - which, isn't great. One of the benefits of being able to generate everything, is that when changes happen, you can just re-generate your client.
+if we have to then modify the specs to add error models in each time.. bleh.
+
 
 
 ### Sample Unit Test document to show example usage
